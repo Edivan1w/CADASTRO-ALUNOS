@@ -1,5 +1,7 @@
 package br.com.sistemaEscola.cadastroAalunos.model;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -34,6 +36,29 @@ public class Endereco {
 		this.gia = gia;
 		this.ddd = ddd;
 		this.siafi = siafi;
+	}
+
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(bairro, cep, complemento, ddd, gia, ibge, localidade, logradouro, siafi, uf);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Endereco other = (Endereco) obj;
+		return Objects.equals(bairro, other.bairro) && Objects.equals(cep, other.cep)
+				&& Objects.equals(complemento, other.complemento) && Objects.equals(ddd, other.ddd)
+				&& Objects.equals(gia, other.gia) && Objects.equals(ibge, other.ibge)
+				&& Objects.equals(localidade, other.localidade) && Objects.equals(logradouro, other.logradouro)
+				&& Objects.equals(siafi, other.siafi) && Objects.equals(uf, other.uf);
 	}
 
 	public String getCep() {

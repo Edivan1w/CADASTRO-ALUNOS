@@ -60,13 +60,7 @@ public class ClasseController {
 		
 	}
 	
-	@PutMapping
-	@Transactional
-	public void inserirAluno(@RequestBody ClasseAlunoDto  dto) {
-	    
-		service.adicionarAluno(dto.getIdClasse(), dto.getIdAluno());
-		ResponseEntity.ok();
-	}
+	
 	
 	@DeleteMapping("/{id}")
 	public void deletar(@PathVariable Long id) {

@@ -10,7 +10,7 @@ public interface ContratoClasseService {
 	Classe buscarPorId(Long id);
 	void atualizar(Long id, String descricao);
 	void deletar(Long id);
-    void adicionarAluno(Long idClasse, Long idAluno);
+    
 	
 	
 	

@@ -54,6 +54,7 @@ public class Aluno {
 
 	public void setClasse(Classe classe) {
 		this.classe = classe;
+		classe.getAlunos().add(this);
 	}
 
 	public DadosPessoais getDadosPessoais() {

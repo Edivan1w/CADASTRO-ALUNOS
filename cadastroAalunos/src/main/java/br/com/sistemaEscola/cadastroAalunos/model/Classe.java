@@ -21,7 +21,7 @@ public class Classe {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String descricao;
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "classe")
 	private List<Aluno> alunos = new ArrayList<>();
 	
 	

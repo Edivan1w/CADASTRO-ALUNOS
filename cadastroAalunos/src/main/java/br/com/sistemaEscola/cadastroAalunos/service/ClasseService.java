@@ -52,13 +52,7 @@ public class ClasseService implements ContratoClasseService{
 		
 	}
 
-	@Override
-	public void adicionarAluno(Long idClasse, Long idAluno) {
-		Aluno aluno = alunoReposiry.findById(idAluno).get();
-		Classe classe = classeRepository.findById(idClasse).get();
-		classe.getAlunos().add(aluno);
-		aluno.setClasse(classe);
-	}
+	
 
 }
 
