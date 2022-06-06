@@ -5,7 +5,7 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Lock;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDto;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
+import br.com.sistemaEscola.cadastroAalunos.model.AlunoDadosParaCadastrar;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
 import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
 import br.com.sistemaEscola.cadastroAalunos.model.Endereco;
@@ -70,12 +71,26 @@ public class AlunoCrontroller {
 	    
 	    aluno.setDadosPessoais(dadosPessoais);
 		aluno.setClasse(classe);
-		List<Aluno> alunos = classe.getAlunos();
-		alunos.add(aluno);
+		
 		classeRepository.save(classe);
 		alunoReposiry.save(aluno);
 	}
 	
+//	@PostMapping
+//	@Transactional
+//	public void salvarAlunoComDados(@RequestParam Long id, @RequestBody AlunoDadosParaCadastrar dados) {
+//		Classe classe = classeRepository.findById(id).get();
+//		String cep = dados.getCep();
+//		
+//		Aluno aluno = new Aluno();
+//		
+//		aluno.setClasse(classe);
+//	    List<Aluno> alunos = classe.getAlunos();
+//		alunos.add(aluno);
+//		classeRepository.save(classe);
+//		alunoReposiry.save(aluno);
+//	}
+//	
 	
 	
 	@PutMapping(value = "{id}")
@@ -90,9 +105,9 @@ public class AlunoCrontroller {
 	@PostMapping("/endereco")
     @Transactional
 	public void salvarEndereco(@RequestParam Long id, @RequestBody Endereco endereco) {
-		Aluno aluno = alunoReposiry.findById(id).get();
+		
 		// Verificar se o Endereco do Cliente já existe (pelo CEP).
-		System.out.println(aluno.getId());
+		
 		System.out.println(endereco.getCep());
 		
 		
@@ -101,11 +116,13 @@ public class AlunoCrontroller {
 			System.out.println("1");
 			salvarComEnderecoExistete(id, endereco);
 			ResponseEntity.ok();
+			return;
 		}else {
 			System.out.println("2");
 			
 			salvarComEnderecoNaoExistete(id, endereco);
 			ResponseEntity.ok();
+			return;
 		}
 	}	
 	
@@ -132,7 +149,7 @@ public class AlunoCrontroller {
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public void dletar(@PathVariable Long id) {
+	public void deletar(@PathVariable Long id) {
 		alunoService.deletarPorId(id);
 		ResponseEntity.ok().build();
 	}
