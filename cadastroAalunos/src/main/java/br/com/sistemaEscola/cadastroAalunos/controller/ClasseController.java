@@ -13,11 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.ClasseAlunoDto;
+import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
-
+import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
+import br.com.sistemaEscola.cadastroAalunos.repository.AlunoReposiry;
+import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
 import br.com.sistemaEscola.cadastroAalunos.service.ClasseService;
 
 
@@ -27,6 +32,10 @@ public class ClasseController {
 	
 	@Autowired
 	private ClasseService service;
+	@Autowired
+	private AlunoReposiry alunoReposiry;
+	@Autowired
+	private ClasseRepository classeRepository;
 	
 	@GetMapping
 	public ResponseEntity<Iterable<Classe>> buscarPorTodasClasses(){
@@ -39,7 +48,7 @@ public class ClasseController {
 	@Transactional
 	public void salvar(@RequestBody String descricao) {
 		Classe classe = new Classe();
-		classe.setDescriçao(descricao);
+		classe.setDescricao(descricao);
 		service.salvar(classe);
 	}
 	
@@ -50,15 +59,22 @@ public class ClasseController {
 		return ResponseEntity.ok(classe);
 	}
 
-	@PutMapping("{id}")
+	@PutMapping("/{id}")
 	@Transactional
 	public void atualizar(@PathVariable Long id, @RequestBody String descricao) {
 		Classe classe = service.buscarPorId(id);
-		classe.setDescriçao(descricao);
+		classe.setDescricao(descricao);
 		service.salvar(classe);
 		ResponseEntity.ok(classe);
 		
 	}
+	
+//	@PostMapping("/matricula")
+//	public void matricularAluno(@RequestParam Long idClasse, @RequestParam Long idAluno) {
+//		
+//		service.matricularAluno(idClasse, idAluno);
+//		ResponseEntity.ok();
+//	}
 	
 	
 	

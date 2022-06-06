@@ -1,5 +1,6 @@
 package br.com.sistemaEscola.cadastroAalunos.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,19 +18,18 @@ public class Aluno {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	private Classe classe;
 	@Embedded
 	private DadosPessoais dadosPessoais;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Endereco endereco;
 	
 	public Aluno() {}
 	
-	public Aluno(Classe classe, DadosPessoais dadosPessoais) {
-		super();
-		this.classe = classe;
+	public Aluno(DadosPessoais dadosPessoais, Endereco endereco) {
 		this.dadosPessoais = dadosPessoais;
+		this.endereco = endereco;
 	}
 
 	public Endereco getEndereco() {
@@ -54,7 +54,6 @@ public class Aluno {
 
 	public void setClasse(Classe classe) {
 		this.classe = classe;
-		classe.getAlunos().add(this);
 	}
 
 	public DadosPessoais getDadosPessoais() {

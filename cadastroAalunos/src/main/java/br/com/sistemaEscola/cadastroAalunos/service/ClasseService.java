@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
+import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
 import br.com.sistemaEscola.cadastroAalunos.repository.AlunoReposiry;
 import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
 import br.com.sistemaEscola.cadastroAalunos.service.impl.ContratoClasseService;
@@ -39,10 +40,10 @@ public class ClasseService implements ContratoClasseService{
 	}
 
 	@Override
-	public void atualizar(Long id, String descricao) {
-		 Classe classe = classeRepository.findById(id).get();
-		 classe.setDescriçao(descricao);
-		 classeRepository.save(classe);
+	public void atualizar(Long id, Classe classe) {
+		 Classe classe2 = classeRepository.findById(id).get();
+		 classe2.setDescricao(classe.getDescricao());
+		 classeRepository.save(classe2);
 	}
 
 	@Override
@@ -53,6 +54,11 @@ public class ClasseService implements ContratoClasseService{
 	}
 
 	
+	public void matricularAluno(Long idClasse, Long idAluno) {
+		Classe classe = classeRepository.findById(idClasse).get();
+		Aluno aluno = alunoReposiry.findById(idAluno).get();
+		aluno.setClasse(classe);
+	}
 
 }
 

@@ -8,7 +8,7 @@ public interface ContratoClasseService {
 	Iterable<Classe> buscarPorTodos();
 	void salvar(Classe classe);
 	Classe buscarPorId(Long id);
-	void atualizar(Long id, String descricao);
+	void atualizar(Long id, Classe classe);
 	void deletar(Long id);
     
 	

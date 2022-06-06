@@ -1,82 +1,45 @@
 package br.com.sistemaEscola.cadastroAalunos.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDto;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
-import br.com.sistemaEscola.cadastroAalunos.model.Classe;
-import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
-import br.com.sistemaEscola.cadastroAalunos.model.Endereco;
 import br.com.sistemaEscola.cadastroAalunos.repository.AlunoReposiry;
 import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
 import br.com.sistemaEscola.cadastroAalunos.repository.EnderecoRepository;
-import br.com.sistemaEscola.cadastroAalunos.service.impl.ContratoAluno;
 import br.com.sistemaEscola.cadastroAalunos.service.impl.ViaCepService;
 
 @Service
-public class AlunoService implements ContratoAluno {
-	
+public class AlunoService {
+
 	@Autowired
 	private AlunoReposiry alunoReposiry;
 	@Autowired
-	private ViaCepService cepService;
-	@Autowired
-	private ClasseService classeService;
+    private ClasseRepository classeRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private ViaCepService cepService;
 	
-	@Override
-	public Iterable<Aluno> buscarTodos() {
-		return alunoReposiry.findAll();
-		 
-	}
-
-	@Override
-	public Aluno buscarPorId(Long Id) {
-		Aluno aluno = alunoReposiry.findById(Id).get();
-		return aluno;
-	}
-
-	@Override
-	public Aluno salvar(DadosPessoais dadosPessoais) {
-		Aluno aluno = new Aluno();
-		aluno.setDadosPessoais(dadosPessoais);
-		alunoReposiry.save(aluno);
-		return aluno;
+	//esse método busca apenas os dados dos alunos que se deseja mostrar. 
+	public List<AlunoDto>buscarListaAlunos(){
+		List<Aluno> list = alunoReposiry.findAll();
+		return AlunoDto.converterParaDto(list);
 	}
 	
-	public void salvarComCep(Long id, Aluno aluno) {
-		String cep = aluno.getEndereco().getCep();
-		Long cep2 = Long.valueOf(cep);
-		Endereco endereco = enderecoRepository.findById(cep2).orElseGet(() -> {
-			Endereco novoEndereco = cepService.consultarCep(cep);
-			enderecoRepository.save(novoEndereco);
-			return novoEndereco;
-		});
-		enderecoRepository.save(endereco);
-		Aluno aluno2 = alunoReposiry.findById(id).get();
-		aluno2.setEndereco(endereco);
-		
+	public List<AlunoDto>buscarPorNome(String nome){
+		List<Aluno>list = alunoReposiry.findByDadosPessoaisNome(nome);
+		list.forEach(x -> System.out.println(x.getDadosPessoais().getNome()));
+		return AlunoDto.converterParaDto(list);
 	}
-
-	@Override
-	public void atualizar(Long id, AlunoDto dto) {
-		Aluno aluno = alunoReposiry.findById(id).get();
-		aluno.setDadosPessoais(dto.getDadosPessoais());
-		aluno.setClasse(dto.getClasse());
-		aluno.setEndereco(dto.getEndereco());
-	}
-
-	@Override
-	public void deletar(Long id) {
+	
+	public void deletarPorId(Long id) {
 		alunoReposiry.deleteById(id);
-		
 	}
-
-	
 	
 }

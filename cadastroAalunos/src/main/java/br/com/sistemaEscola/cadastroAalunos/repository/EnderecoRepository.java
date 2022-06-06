@@ -1,9 +1,18 @@
 package br.com.sistemaEscola.cadastroAalunos.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+
+
+
+import java.util.Optional;
+
+import org.springframework.data.repository.CrudRepository;
 
 import br.com.sistemaEscola.cadastroAalunos.model.Endereco;
 
-public interface EnderecoRepository extends JpaRepository<Endereco, Long>{
+public interface EnderecoRepository extends CrudRepository<Endereco, String>{
+
+	
+
+	Optional<Endereco> findByCep(String cep);
 
 }
