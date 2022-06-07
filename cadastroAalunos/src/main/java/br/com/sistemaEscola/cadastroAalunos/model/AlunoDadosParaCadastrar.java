@@ -4,23 +4,24 @@ public class AlunoDadosParaCadastrar {
 	
 
 	
-	private DadosPessoais dados;
 	private String cep;
-	
-	
-	
-	public DadosPessoais getDados() {
-		return dados;
-	}
-	public void setDados(DadosPessoais dados) {
-		this.dados = dados;
-	}
+	private DadosPessoais dadosPessoais;
 	public String getCep() {
 		return cep;
 	}
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
+	public DadosPessoais getDadosPessoais() {
+		return dadosPessoais;
+	}
+	public void setDadosPessoais(DadosPessoais dadosPessoais) {
+		this.dadosPessoais = dadosPessoais;
+	}
+	
+	
+	
+
 	
 	
 	

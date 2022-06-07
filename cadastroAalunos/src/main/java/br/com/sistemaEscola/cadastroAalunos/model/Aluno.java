@@ -3,11 +3,11 @@ package br.com.sistemaEscola.cadastroAalunos.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -22,7 +22,7 @@ public class Aluno {
 	private Classe classe;
 	@Embedded
 	private DadosPessoais dadosPessoais;
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Endereco endereco;
 	
 	public Aluno() {}

@@ -1,7 +1,5 @@
 package br.com.sistemaEscola.cadastroAalunos.service;
 
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
-import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
+
 import br.com.sistemaEscola.cadastroAalunos.repository.AlunoReposiry;
 import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
 import br.com.sistemaEscola.cadastroAalunos.service.impl.ContratoClasseService;

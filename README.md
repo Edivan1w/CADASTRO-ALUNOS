@@ -1,4 +1,4 @@
-Este projeto ainda está em  desenvolvimento. Eu estou usando-o para aplicar meu aprendizado nos cursos da Dio.
+Este é uma sistema de cadastro de alunos, e seu endereço é cadastrado com consulta de cep na API do ViaCEP.
 
 
 
