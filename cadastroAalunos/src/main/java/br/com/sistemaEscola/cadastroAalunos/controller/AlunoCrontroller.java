@@ -2,8 +2,10 @@ package br.com.sistemaEscola.cadastroAalunos.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,22 +17,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDto;
+import br.com.sistemaEscola.cadastroAalunos.form.AlunoDadosParaCadastrar;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
-import br.com.sistemaEscola.cadastroAalunos.model.AlunoDadosParaCadastrar;
-
 import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
 
-
-
 import br.com.sistemaEscola.cadastroAalunos.service.AlunoService;
-
 
 @RestController
 @RequestMapping("/aluno")
 public class AlunoCrontroller {
-
 
 	@Autowired
 	private AlunoService alunoService;
@@ -55,9 +53,12 @@ public class AlunoCrontroller {
 
 	@PostMapping
 	@Transactional
-	public void salvarAlunoComDados(@RequestParam Long id, @RequestBody AlunoDadosParaCadastrar dados) {
-		alunoService.salvarAlunoComDados(id, dados);
-		ResponseEntity.ok();
+	public ResponseEntity<AlunoDto> salvarAlunoComDados(@RequestParam Long id,
+ //com o valid spring reconhecer e gerar um erro. O spring vai varrer as anotações do Bean validation e gerar o erro 400.
+			// o spring irá ijetar
+			@RequestBody @Valid AlunoDadosParaCadastrar dados, UriComponentsBuilder builder) {
+		return alunoService.salvarAlunoComDados(id, dados, builder);
+
 	}
 
 	@PutMapping(value = "{id}")
@@ -71,9 +72,9 @@ public class AlunoCrontroller {
 	// caso não exista ele irá consumir a API.
 	@PutMapping("/atualizar/endereco")
 	@Transactional
-	public void atualizarEnderecoAluno(@RequestParam Long id, @RequestBody AlunoDadosParaCadastrar enderecoCep) {
-		String cep = enderecoCep.getCep();
-        alunoService.atualizarEnderecoAluno(id, cep);
+	public ResponseEntity<AlunoDto> atualizarEnderecoAluno(@RequestParam Long id,
+			@RequestBody AlunoDadosParaCadastrar enderecoCep) {
+		return alunoService.atualizarEnderecoAluno(id, enderecoCep);
 	}
 
 	@DeleteMapping("/{id}")

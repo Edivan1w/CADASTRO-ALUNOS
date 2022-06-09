@@ -1,4 +1,4 @@
-package br.com.sistemaEscola.cadastroAalunos.model;
+package br.com.sistemaEscola.cadastroAalunos.form;
 
 public class AlunoEnrecoParaAtualizar {
 
