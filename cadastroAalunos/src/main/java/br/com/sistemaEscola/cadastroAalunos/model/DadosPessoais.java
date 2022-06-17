@@ -1,9 +1,9 @@
 package br.com.sistemaEscola.cadastroAalunos.model;
 
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
+import br.com.sistemaEscola.cadastroAalunos.form.AlunoDadosForm;
+
 
 @Embeddable
 public class DadosPessoais {
@@ -16,12 +16,11 @@ public class DadosPessoais {
 	
 	public DadosPessoais() {}
 	
-	public DadosPessoais(String nome, String cpf, String nomePai, String nomeMae) {
-		super();
-		this.nome = nome;
-		this.cpf = cpf;
-		this.nomePai = nomePai;
-		this.nomeMae = nomeMae;
+	public DadosPessoais(AlunoDadosForm alunoDadosForm) {
+		this.nome = alunoDadosForm.getNome();
+		this.cpf = alunoDadosForm.getCpf();
+		this.nomePai = alunoDadosForm.getNomePai();
+		this.nomeMae = alunoDadosForm.getNomeMae();
 	}
 
 	public String getNome() {
@@ -55,6 +54,8 @@ public class DadosPessoais {
 	public void setNomeMae(String nomeMae) {
 		this.nomeMae = nomeMae;
 	}
+
+	
 	
 	
 	

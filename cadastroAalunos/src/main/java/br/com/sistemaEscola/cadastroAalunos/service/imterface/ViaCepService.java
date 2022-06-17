@@ -1,4 +1,4 @@
-package br.com.sistemaEscola.cadastroAalunos.service.impl;
+package br.com.sistemaEscola.cadastroAalunos.service.imterface;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,11 +1,17 @@
 package br.com.sistemaEscola.cadastroAalunos.controller;
 
-import java.util.List;
+import java.net.URI;
+
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,13 +23,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDto;
-import br.com.sistemaEscola.cadastroAalunos.form.AlunoDadosParaCadastrar;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
-import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
-
+import br.com.sistemaEscola.cadastroAalunos.form.AlunoDadosForm;
+import br.com.sistemaEscola.cadastroAalunos.model.Classe;
+import br.com.sistemaEscola.cadastroAalunos.repository.AlunoReposiry;
+import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
 import br.com.sistemaEscola.cadastroAalunos.service.AlunoService;
 
 @RestController
@@ -32,56 +40,65 @@ public class AlunoCrontroller {
 
 	@Autowired
 	private AlunoService alunoService;
+	@Autowired
+	private AlunoReposiry alunoReposiry;
+	@Autowired
+	private ClasseRepository classeRepository;
 
 	// buscar alunos no banco de dados usando o nome como parametro ou sem
 	// parâmetro.
-	@GetMapping
-	public ResponseEntity<List<AlunoDto>> buscarAlunos(String nome) {
-		if (nome == null) {
-			List<AlunoDto> list = alunoService.buscarListaAlunos();
-			return ResponseEntity.ok(list);
-		} else {
-			List<AlunoDto> list = alunoService.buscarPorNome(nome);
-			return ResponseEntity.ok(list);
-		}
-	}
+	@GetMapping // parâmetro não obrigatório
+	public Page<AlunoDto> buscarAlunos(@RequestParam(required = false) String nome,
+			@PageableDefault(sort = "dadosPessoais_Nome", direction = Direction.ASC, page = 0, size = 10) Pageable pageable) {
+		// criar um objeto do tipo pageable para paginação
+		// Pageable pageable = PageRequest.of(pagina, qtd, Direction.ASC, ordenacao);
+		return alunoService.buscarListaAlunos(nome, pageable);
+}
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<Aluno> buscarPorId(@PathVariable Long id) {
-		return ResponseEntity.ok(alunoService.buscarPorId(id));
-	}
 
-	@PostMapping
+	@PostMapping("/classe-matricola/{id}")
 	@Transactional
-	public ResponseEntity<AlunoDto> salvarAlunoComDados(@RequestParam Long id,
- //com o valid spring reconhecer e gerar um erro. O spring vai varrer as anotações do Bean validation e gerar o erro 400.
-			// o spring irá ijetar
-			@RequestBody @Valid AlunoDadosParaCadastrar dados, UriComponentsBuilder builder) {
-		return alunoService.salvarAlunoComDados(id, dados, builder);
+	public ResponseEntity<AlunoDto> salvarAlunoComDados(@PathVariable Long id, @RequestBody @Valid AlunoDadosForm dados,
+			UriComponentsBuilder builder) {
+		Optional<Classe> optional = classeRepository.findById(id);
+		if (optional.isPresent()) {
+			AlunoDto alunoDto = alunoService.salvarAlunoComDados(id, dados);
+			Aluno aluno = alunoService.buscarPorId(alunoDto.getId());
+			URI uri = builder.path("/aluno/{id}").buildAndExpand(aluno.getId()).toUri();
+			// é uma boa prática devolver o codgo 201 através do metodo created e
+			// representar o que foi criado
+			// devolver a uri e o corpo.
+			return ResponseEntity.created(uri).body(alunoDto);
+		}
 
-	}
-
-	@PutMapping(value = "{id}")
-	public void atualizarDadosPessoais(@PathVariable Long id, @RequestBody DadosPessoais dadosPessoais) {
-		alunoService.atualizarDadosPessoais(id, dadosPessoais);
+		return ResponseEntity.notFound().build();
 	}
 
 	// Este método vai atribuir um endereço a um aluno, o metodo esta usando o
 	// metodo consultar cep que esta consumindo uma api externa
 	// Viacep. caso o endereço exista ele irá atribuir o endereço existente no banco
 	// caso não exista ele irá consumir a API.
-	@PutMapping("/atualizar/endereco")
+	@PutMapping("/atualizar/endereco-dados/{id}")
 	@Transactional
-	public ResponseEntity<AlunoDto> atualizarEnderecoAluno(@RequestParam Long id,
-			@RequestBody AlunoDadosParaCadastrar enderecoCep) {
-		return alunoService.atualizarEnderecoAluno(id, enderecoCep);
+	public ResponseEntity<?> atualizarEnderecoEDadosPessoaisAluno(@PathVariable Long id,
+			@RequestBody AlunoDadosForm enderecoDados) {
+		Optional<Aluno> optional = alunoReposiry.findById(id);
+		if (optional.isPresent()) {
+			alunoService.atualizarCepEDados(id, enderecoDados);
+			return ResponseEntity.ok().build();
+		}
+
+		return ResponseEntity.notFound().build();
 	}
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public void deletar(@PathVariable Long id) {
-		alunoService.deletarPorId(id);
-		ResponseEntity.ok().build();
+	public ResponseEntity<?> deletar(@PathVariable Long id) {
+		Optional<Aluno> optional = alunoReposiry.findById(id);
+		if (optional.isPresent()) {
+			alunoService.deletarPorId(id);
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.notFound().build();
 	}
-
 }

@@ -2,35 +2,28 @@ package br.com.sistemaEscola.cadastroAalunos.dto;
 
 
 
-import java.util.List;
-import java.util.stream.Collectors;
+
+
+
+
+import org.springframework.data.domain.Page;
 
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
-import br.com.sistemaEscola.cadastroAalunos.model.Classe;
-import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
-import br.com.sistemaEscola.cadastroAalunos.model.Endereco;
-import br.com.sistemaEscola.cadastroAalunos.repository.AlunoReposiry;
+
 
 public class AlunoDto {
 
 
+	private Long id;
 	private String nome;
 	private String nomePai;
 	private String nomeMae;
 	private String cep;
 	
 	
-	public AlunoDto() {}
-
-	public AlunoDto(Long idClasseParaMatricola, String nome,  String nomePai, String nomeMae) {
-		
-		this.nome = nome;
-		
-		this.nomePai = nomePai;
-		this.nomeMae = nomeMae;
-	}
 
 	public AlunoDto(Aluno aluno) {
+		this.id = aluno.getId();
 		this.nome = aluno.getDadosPessoais().getNome();
 		this.nomePai = aluno.getDadosPessoais().getNomePai();
 		this.nomeMae = aluno.getDadosPessoais().getNomeMae();
@@ -40,6 +33,22 @@ public class AlunoDto {
 	
 	
 	
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+
 
 	public String getCep() {
 		return cep;
@@ -76,8 +85,8 @@ public class AlunoDto {
 	}
 	
 	
-	public static List<AlunoDto> converterParaDto(List<Aluno> alunos) {
-		return alunos.stream().map(AlunoDto::new).collect(Collectors.toList());
+	public static Page<AlunoDto> converterParaDto(Page<Aluno> alunos) {
+		return alunos.map(AlunoDto::new);
 	}
 	
 

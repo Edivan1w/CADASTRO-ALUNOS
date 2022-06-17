@@ -1,4 +1,4 @@
-package br.com.sistemaEscola.cadastroAalunos.service.impl;
+package br.com.sistemaEscola.cadastroAalunos.service.imterface;
 
 
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;

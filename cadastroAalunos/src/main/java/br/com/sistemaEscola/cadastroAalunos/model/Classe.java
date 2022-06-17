@@ -21,24 +21,37 @@ public class Classe {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String descricao;
+	private NivelClasse nivelClasse;
+	
+
+
 	@OneToMany(mappedBy = "classe", cascade = CascadeType.ALL)
 	private List<Aluno> alunos = new ArrayList<>();
 
 	public Classe() {
 	}
-	
-	
 
-	public void setAlunos(List<Aluno> alunos) {
-		
+	public Classe(String descricao, NivelClasse nivelClasse, List<Aluno> alunos) {
+		this.descricao = descricao;
+		this.nivelClasse = nivelClasse;
 		this.alunos = alunos;
-}
+	}
+
+
 
 	public Long getId() {
 		return id;
 	}
 
-	
+	public NivelClasse getNivelClasse() {
+		return nivelClasse;
+	}
+
+
+
+	public void setNivelClasse(NivelClasse nivelClasse) {
+		this.nivelClasse = nivelClasse;
+	}
 
 	
 

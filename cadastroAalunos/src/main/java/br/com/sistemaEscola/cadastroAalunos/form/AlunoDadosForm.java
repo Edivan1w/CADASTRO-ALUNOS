@@ -2,26 +2,25 @@ package br.com.sistemaEscola.cadastroAalunos.form;
 
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
+import org.springframework.lang.NonNull;
 
-
-
-public class AlunoDadosParaCadastrar {
+public class AlunoDadosForm {
 	
 
-	@NotNull @NotEmpty @Size(min = 8)
+	@NonNull @NotEmpty @Size(min = 9)
 	private String cep;
-	@NotNull @NotEmpty @Size(min = 3)
+	@NonNull @NotEmpty @Size(min = 3)
 	private String nome;
-	@NotNull @NotEmpty @Size(min = 11)
+	@NonNull @NotEmpty @Size(min = 11)
 	private String cpf;
-	@NotNull @NotEmpty @Size(min = 3)
+	@NonNull @NotEmpty @Size(min = 3)
 	private String nomePai;
-	@NotNull @NotEmpty @Size(min = 3)
+	@NonNull @NotEmpty @Size(min = 3)
 	private String nomeMae;
+	
+	
 	
 	
 	
@@ -55,10 +54,10 @@ public class AlunoDadosParaCadastrar {
 	public void setNomeMae(String nomeMae) {
 		this.nomeMae = nomeMae;
 	}
-	public DadosPessoais coverterEmDadosPessoais() {
-		return new DadosPessoais(nome, cpf, nomePai, nomeMae);
-	}
-		
+	
+
+   
+	
 	
 	
 

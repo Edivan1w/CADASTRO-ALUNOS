@@ -1,27 +1,28 @@
 package br.com.sistemaEscola.cadastroAalunos.service;
 
-import java.net.URI;
-import java.util.List;
 
-import javax.validation.Valid;
+
+
+
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDto;
-import br.com.sistemaEscola.cadastroAalunos.form.AlunoDadosParaCadastrar;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
+import br.com.sistemaEscola.cadastroAalunos.form.AlunoDadosForm;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
-import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
+
 import br.com.sistemaEscola.cadastroAalunos.model.Endereco;
 import br.com.sistemaEscola.cadastroAalunos.repository.AlunoReposiry;
 import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
 import br.com.sistemaEscola.cadastroAalunos.repository.EnderecoRepository;
-import br.com.sistemaEscola.cadastroAalunos.service.impl.ContratoAluno;
-import br.com.sistemaEscola.cadastroAalunos.service.impl.ViaCepService;
+import br.com.sistemaEscola.cadastroAalunos.service.imterface.ContratoAluno;
+import br.com.sistemaEscola.cadastroAalunos.service.imterface.ViaCepService;
 
 @Service
 public class AlunoService implements ContratoAluno {
@@ -34,89 +35,92 @@ public class AlunoService implements ContratoAluno {
 	private EnderecoRepository enderecoRepository;
 	@Autowired
 	private ViaCepService cepService;
+	
 
 	// esse método busca apenas os dados dos alunos que se deseja mostrar.
 	@Override
-	public List<AlunoDto> buscarListaAlunos() {
-		List<Aluno> list = alunoReposiry.findAll();
-		return AlunoDto.converterParaDto(list);
+	public Page<AlunoDto> buscarListaAlunos(String nome, Pageable pageable) {
+		if (nome == null) {
+			Page<Aluno> pageAlunos = alunoReposiry.findAll(pageable);
+			return AlunoDto.converterParaDto(pageAlunos);
+		}else {
+			Page<Aluno> pageAlunos = alunoReposiry.findByDadosPessoaisNome(nome, pageable);
+			return AlunoDto.converterParaDto(pageAlunos);
+		}
+		
 	}
-
-	// retorna apenas um aluno com o parametro id
+	
+	//retorna apenas um aluno com o parametro id
 	@Override
 	public Aluno buscarPorId(Long id) {
 		return alunoReposiry.findById(id).get();
 	}
 
-	@Override
-	public List<AlunoDto> buscarPorNome(String nome) {
-		List<Aluno> list = alunoReposiry.findByDadosPessoaisNome(nome);
-		return AlunoDto.converterParaDto(list);
-	}
 
-	// salva o aluno com todos os seus dados
+	//salva o aluno com todos os seus dados
 	@Override
-	public ResponseEntity<AlunoDto> salvarAlunoComDados(Long id, AlunoDadosParaCadastrar dadosCadastrar, UriComponentsBuilder builder) {
+	public AlunoDto salvarAlunoComDados(Long id, AlunoDadosForm dados) {
 		Classe classe = classeRepository.findById(id).get();
 		Aluno aluno = new Aluno();
 		aluno.setClasse(classe);
-		DadosPessoais dados = dadosCadastrar.coverterEmDadosPessoais();
 		aluno.setDadosPessoais(dados);
-		System.out.println(dados.getNome());
-		if (enderecoRepository.existsById(dadosCadastrar.getCep())) {
+		if (enderecoRepository.existsById(dados.getCep())) {
 			System.out.println("1");
-			Endereco endereco = enderecoRepository.findById(dadosCadastrar.getCep()).get();
+			Endereco endereco = enderecoRepository.findById(dados.getCep()).get();
 			aluno.setEndereco(endereco);
 
 		} else {
 			System.out.println("2");
-			String cep = dadosCadastrar.getCep();
+			String cep = dados.getCep();
 			Endereco endereco = cepService.consultarCep(cep);
 			aluno.setEndereco(endereco);
 		}
-
-		alunoReposiry.save(aluno);
-		// aqui está sendo criada a nova url que será devolvida ao cliente.
-		URI uri = builder.path("/aluno/{id}").buildAndExpand(aluno.getId()).toUri();
-		// mandar o status 201 que é o de criação, que recebe umURI
-        //é uma boa prática do padrão REST devolver dto.
-		return ResponseEntity.created(uri).body(new AlunoDto(aluno));
+		
+		 alunoReposiry.save(aluno);
+		 
+         return new AlunoDto(aluno);
+          
 	}
 
-	// atualiza apenas o endereco do aluno
+	//atualiza apenas o endereco do aluno
 	@Override
-	public ResponseEntity<AlunoDto> atualizarEnderecoAluno(Long id, AlunoDadosParaCadastrar enderecoCep) {
+	public void atualizarCepEDados(Long id, AlunoDadosForm enderecoDados) {
 		// Verificar se o Endereco do Cliente já existe (pelo CEP).
-        String cep = enderecoCep.getCep();
+		Aluno aluno = alunoReposiry.findById(id).get();
+		aluno.setDadosPessoais(enderecoDados);
+		String cep = enderecoDados.getCep();
 		System.out.println(cep);
 		if (enderecoRepository.existsById(cep)) {
 			System.out.println("1");
 			salvarComEnderecoExistete(id, cep);
 			
+			return;
 		} else {
 			System.out.println("2");
 			salvarComEnderecoNaoExistete(id, cep);
+			
+			return;
 		}
-		
-		Aluno aluno = alunoReposiry.findById(id).get();
-		return ResponseEntity.ok(new AlunoDto(aluno));
 	}
-
-	// atualiza apenas os dados pessoais do aluno
-	@Override
-	public ResponseEntity<AlunoDto> atualizarDadosPessoais(Long id, DadosPessoais dadosPessoais) {
-		Aluno aluno = alunoReposiry.findById(id).get();
-		aluno.setDadosPessoais(dadosPessoais);
-		return ResponseEntity.ok(new AlunoDto(aluno));
-	}
-
+	
+//	//atualiza apenas os dados pessoais do aluno
+//	@Override
+//	public void atualizarDadosPessoais(Long id, DadosPessoais dadosPessoais) {
+//		Aluno aluno = alunoReposiry.findById(id).get();
+//		aluno.setDadosPessoais(dadosPessoais);
+//	}
+	
 	@Override
 	public void deletarPorId(Long id) {
 		alunoReposiry.deleteById(id);
 	}
+	
+	
+
+	
 
 	// metodo utilitário
-	public void salvarComEnderecoExistete(Long id, String cep) {
+	private void salvarComEnderecoExistete(Long id, String cep) {
 		Aluno aluno = alunoReposiry.findById(id).get();
 		Endereco endereco2 = enderecoRepository.findById(cep).get();
 		aluno.setEndereco(endereco2);
@@ -124,7 +128,7 @@ public class AlunoService implements ContratoAluno {
 	}
 
 	// metodo utilitário
-	public void salvarComEnderecoNaoExistete(Long id, String cep) {
+	private void salvarComEnderecoNaoExistete(Long id, String cep) {
 		Aluno aluno = alunoReposiry.findById(id).get();
 
 		Endereco novoEndereco = cepService.consultarCep(cep);

@@ -32,10 +32,7 @@ public class ClasseController {
 	
 	@Autowired
 	private ClasseService service;
-	@Autowired
-	private AlunoReposiry alunoReposiry;
-	@Autowired
-	private ClasseRepository classeRepository;
+	
 	
 	@GetMapping
 	public ResponseEntity<Iterable<Classe>> buscarPorTodasClasses(){
@@ -45,11 +42,11 @@ public class ClasseController {
 	}
 	
 	@PostMapping
-	@Transactional
-	public void salvar(@RequestBody String descricao) {
+	public ResponseEntity<Classe> salvar(@RequestBody String descricao) {
 		Classe classe = new Classe();
 		classe.setDescricao(descricao);
 		service.salvar(classe);
+		return ResponseEntity.ok(classe);
 	}
 	
 
@@ -61,24 +58,16 @@ public class ClasseController {
 
 	@PutMapping("/{id}")
 	@Transactional
-	public void atualizar(@PathVariable Long id, @RequestBody String descricao) {
+	public ResponseEntity<Classe> atualizar(@PathVariable Long id, @RequestBody String descricao) {
 		Classe classe = service.buscarPorId(id);
 		classe.setDescricao(descricao);
-		service.salvar(classe);
-		ResponseEntity.ok(classe);
+		return ResponseEntity.ok(classe);
 		
 	}
 	
-//	@PostMapping("/matricula")
-//	public void matricularAluno(@RequestParam Long idClasse, @RequestParam Long idAluno) {
-//		
-//		service.matricularAluno(idClasse, idAluno);
-//		ResponseEntity.ok();
-//	}
-	
-	
 	
 	@DeleteMapping("/{id}")
+	@Transactional
 	public void deletar(@PathVariable Long id) {
 		service.deletar(id);
 		ResponseEntity.ok().build();
