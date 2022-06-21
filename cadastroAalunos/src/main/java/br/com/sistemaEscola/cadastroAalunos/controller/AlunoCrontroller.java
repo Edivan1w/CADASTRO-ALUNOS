@@ -7,6 +7,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
@@ -47,6 +49,7 @@ public class AlunoCrontroller {
 
 	// buscar alunos no banco de dados usando o nome como parametro ou sem
 	// parâmetro.
+	@Cacheable(value = "listaDeAlunos")
 	@GetMapping // parâmetro não obrigatório
 	public Page<AlunoDto> buscarAlunos(@RequestParam(required = false) String nome,
 			@PageableDefault(sort = "dadosPessoais_Nome", direction = Direction.ASC, page = 0, size = 10) Pageable pageable) {
@@ -56,6 +59,7 @@ public class AlunoCrontroller {
 }
 
 
+	@CacheEvict(value = "listaDeAlunos", allEntries = true)
 	@PostMapping("/classe-matricola/{id}")
 	@Transactional
 	public ResponseEntity<AlunoDto> salvarAlunoComDados(@PathVariable Long id, @RequestBody @Valid AlunoDadosForm dados,
@@ -78,6 +82,7 @@ public class AlunoCrontroller {
 	// metodo consultar cep que esta consumindo uma api externa
 	// Viacep. caso o endereço exista ele irá atribuir o endereço existente no banco
 	// caso não exista ele irá consumir a API.
+	@CacheEvict(value = "listaDeAlunos", allEntries = true)
 	@PutMapping("/atualizar/endereco-dados/{id}")
 	@Transactional
 	public ResponseEntity<?> atualizarEnderecoEDadosPessoaisAluno(@PathVariable Long id,
@@ -91,6 +96,7 @@ public class AlunoCrontroller {
 		return ResponseEntity.notFound().build();
 	}
 
+	@CacheEvict(value = "listaDeAlunos", allEntries = true)
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> deletar(@PathVariable Long id) {

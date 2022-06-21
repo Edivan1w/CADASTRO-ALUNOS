@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.sistemaEscola.cadastroAalunos.form.FormPreenchimentoNota;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.model.Disciplina;
 import br.com.sistemaEscola.cadastroAalunos.model.NomeDisciplinas;
@@ -29,9 +30,11 @@ public class DisciplinaService {
 	}
 	
 	
-	public void cadastrarNotaPimeiroBimestre(NomeDisciplinas nomeDisciplina, Long idAluno, Double notaDoBimestre, Integer semestre) {
-		Disciplina disciplina = disciplinasRepository.findDisciplina(nomeDisciplina, idAluno);
-		
+	public Disciplina cadastrarNotaPimeiroBimestre( Long idAluno, FormPreenchimentoNota formDisciplina) {
+		NomeDisciplinas enumDisciplina = NomeDisciplinas.valueOf(formDisciplina.getNomeDisciplina().toUpperCase());
+		Disciplina disciplina = disciplinasRepository.findDisciplina(enumDisciplina, idAluno);
+		Double notaDoBimestre = formDisciplina.getNota();
+		Integer semestre = formDisciplina.getSemestreParaCadastrarNota();
 		switch(semestre) {
 		case 1:
 			disciplina.setPrimeiroBimestre(notaDoBimestre);
@@ -49,6 +52,7 @@ public class DisciplinaService {
 		
 		
 		disciplina.setMedia();
+		return disciplina;
 	}
 	
 	public List<Disciplina> buscarDisciplinaaPorAluno(Long idAluno){

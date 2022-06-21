@@ -11,12 +11,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDadosEscolaresDto;
+import br.com.sistemaEscola.cadastroAalunos.form.FormPreenchimentoNota;
+import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.model.Disciplina;
-import br.com.sistemaEscola.cadastroAalunos.model.NomeDisciplinas;
+import br.com.sistemaEscola.cadastroAalunos.service.AlunoService;
 import br.com.sistemaEscola.cadastroAalunos.service.DisciplinaService;
 
 @RestController
@@ -26,7 +30,8 @@ public class DisciplinaController {
 	
 	@Autowired
 	private DisciplinaService disciplinaService;
-
+    @Autowired
+    private AlunoService alunoService;
 	
 	@GetMapping("/{idAluno}")
 	public ResponseEntity<List<Disciplina>> buscarDisciplinasPorAluno(@RequestParam Long idAluno){
@@ -43,10 +48,10 @@ public class DisciplinaController {
 	
 	@PutMapping("{idAluno}")
 	@Transactional
-	public void cadastrarOuAtualizarNotas(@RequestParam String nomeDisciplina, @PathVariable Long idAluno, @RequestParam Double nota,
-			@RequestParam Integer semestreParaCadastrarNota) {
-		NomeDisciplinas nome = NomeDisciplinas.valueOf(nomeDisciplina.toUpperCase());
-		disciplinaService.cadastrarNotaPimeiroBimestre(nome, idAluno, nota, semestreParaCadastrarNota);
+	public ResponseEntity<AlunoDadosEscolaresDto> cadastrarOuAtualizarNotas(@PathVariable Long idAluno, @RequestBody FormPreenchimentoNota formDisciplina) {
+		AlunoDadosEscolaresDto dto = new AlunoDadosEscolaresDto(alunoService.buscarPorId(idAluno),
+				disciplinaService.cadastrarNotaPimeiroBimestre(idAluno, formDisciplina));
+		return ResponseEntity.ok(dto);
 	}
 	
 	

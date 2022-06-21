@@ -13,7 +13,7 @@ public interface AlunoReposiry extends JpaRepository<Aluno, Long> {
 
 	
 
-	List<Aluno> findByDadosPessoaisNome(String nome);
+	List<Aluno> findByDadosPessoaisNomeLike(String nome);
 
 	Page<Aluno> findByDadosPessoaisNome(String nome, Pageable pageable);
 
