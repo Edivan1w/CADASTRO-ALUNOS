@@ -32,7 +32,7 @@ public class TokenServ {
 				.setSubject(usuario.getId().toString())
 				.setIssuedAt(hoje)
 				.setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(expiration)))
-				.signWith(SignatureAlgorithm.ES256, secret)
+				.signWith(SignatureAlgorithm.HS256, secret)
 				.compact();
 	}
 
@@ -49,7 +49,7 @@ public class TokenServ {
 	public Long getIdUsuario(String token) {
 		// TODO Auto-generated method stub
 		 Claims body = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
-		 return Long.valueOf(body.getSubject());
+		 return Long.parseLong(body.getSubject());
 		 
 	}
 	

@@ -46,16 +46,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/aluno/**").hasAuthority("LEITURA_ESCRITA")
 		.antMatchers(HttpMethod.POST ,"/auth").permitAll()
+		.antMatchers(HttpMethod.GET ,"/actuator/**").permitAll()
 		.anyRequest()
 		//que está autenticada
 		.authenticated()
 		.and()                     //gaudar nenhum estatdo
 		.csrf().disable()
 		.addFilterBefore(new JWTAutenticacaoFilter( tokenServ, usuarioRepository), UsernamePasswordAuthenticationFilter.class)
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and()
-		.formLogin().disable()
-		.httpBasic();
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
 	}
 
 	
@@ -65,13 +64,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(usuarioService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(new BCryptPasswordEncoder().encode("123456"));
-	}
+	
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		
 	}
+	
+//	public static void main(String[] args) {
+//		System.out.println(new BCryptPasswordEncoder().encode("123456"));
+//	}
 	
 }
