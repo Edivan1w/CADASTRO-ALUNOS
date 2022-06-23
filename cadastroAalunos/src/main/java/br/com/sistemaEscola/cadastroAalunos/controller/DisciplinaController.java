@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDadosEscolaresDto;
 import br.com.sistemaEscola.cadastroAalunos.form.FormPreenchimentoNota;
-import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.model.Disciplina;
 import br.com.sistemaEscola.cadastroAalunos.service.AlunoService;
 import br.com.sistemaEscola.cadastroAalunos.service.DisciplinaService;
@@ -32,14 +31,18 @@ public class DisciplinaController {
 	private DisciplinaService disciplinaService;
     @Autowired
     private AlunoService alunoService;
+    
 	
 	@GetMapping("/{idAluno}")
-	public ResponseEntity<List<Disciplina>> buscarDisciplinasPorAluno(@RequestParam Long idAluno){
-		List<Disciplina> list = disciplinaService.buscarDisciplinaaPorAluno(idAluno);
-		return ResponseEntity.ok(list);
+	public List<AlunoDadosEscolaresDto> buscarDisciplinasPorAluno(@PathVariable Long idAluno){
+	
+		List<Disciplina> buscarDisciplinaaPorAluno = disciplinaService.buscarDisciplinaaPorAluno(idAluno);
+		List<AlunoDadosEscolaresDto>listDto = AlunoDadosEscolaresDto.converter(buscarDisciplinaaPorAluno);
+		
+		return listDto;
 	}
 	
-	
+
 	@PostMapping("/{idAluno}")
 	@Transactional
 	public void cadastrarMateriaNoPerfilAluno(@PathVariable Long idAluno, @RequestParam String nomeDisciplina) {
@@ -50,9 +53,9 @@ public class DisciplinaController {
 	@Transactional
 	public ResponseEntity<AlunoDadosEscolaresDto> cadastrarOuAtualizarNotas(@PathVariable Long idAluno, @RequestBody FormPreenchimentoNota formDisciplina) {
 		AlunoDadosEscolaresDto dto = new AlunoDadosEscolaresDto(alunoService.buscarPorId(idAluno),
-				disciplinaService.cadastrarNotaPimeiroBimestre(idAluno, formDisciplina));
+				disciplinaService.cadastrarNotaBimestre(idAluno, formDisciplina));
 		return ResponseEntity.ok(dto);
 	}
 	
-	
+
 }

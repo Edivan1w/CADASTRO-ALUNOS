@@ -23,6 +23,7 @@ public class Disciplina {
 	private Long id;
 	@Enumerated(EnumType.STRING)
 	private NomeDisciplinas nomeDisciplina;
+	private String nomeAlunoVinculado;
 	private Double primeiroBimestre = 0.0;
 	private Double segundoBimestre = 0.0;
 	private Double terceiroBimestre = 0.0;
@@ -65,6 +66,7 @@ public class Disciplina {
 		NomeDisciplinas valueOf = NomeDisciplinas.valueOf(nomeDisciplina.toUpperCase());
 		System.out.println(valueOf);
 		this.nomeDisciplina = valueOf;
+		
 	}
 
 
@@ -113,5 +115,18 @@ public class Disciplina {
 		this.media = (this.getPrimeiroBimestre() + this.getSegundoBimestre() + 
 				this.getTerceiroBimestre() + this.getQuartoBimestre())/4;
 	}
+
+
+
+	public String getNomeAlunoVinculado() {
+		return nomeAlunoVinculado;
+	}
+
+
+
+	public void setNomeAlunoVinculado(String nomeAlunoVinculado) {
+		this.nomeAlunoVinculado = nomeAlunoVinculado;
+	}
+	
 	
 }

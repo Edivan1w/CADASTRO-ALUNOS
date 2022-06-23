@@ -47,6 +47,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/aluno/**").hasAuthority("LEITURA_ESCRITA")
 		.antMatchers(HttpMethod.POST ,"/auth").permitAll()
 		.antMatchers(HttpMethod.GET ,"/actuator/**").permitAll()
+		.antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+		.antMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
 		.anyRequest()
 		//que está autenticada
 		.authenticated()

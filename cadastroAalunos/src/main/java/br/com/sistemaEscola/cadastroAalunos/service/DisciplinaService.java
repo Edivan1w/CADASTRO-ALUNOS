@@ -24,13 +24,14 @@ public class DisciplinaService {
 	public void incluirDisciplina(Long idAluno, String nomeDisciplina) {
 		Disciplina disciplina = new Disciplina();
 		disciplina.setNomeDisciplina(nomeDisciplina);
+		disciplina.setNomeAlunoVinculado(alunoService.buscarPorId(idAluno).getDadosPessoais().getNome());
 		disciplinasRepository.save(disciplina);
 		Aluno aluno = alunoService.buscarPorId(idAluno);
 		disciplina.setAluno(aluno);
 	}
 	
 	
-	public Disciplina cadastrarNotaPimeiroBimestre( Long idAluno, FormPreenchimentoNota formDisciplina) {
+	public Disciplina cadastrarNotaBimestre( Long idAluno, FormPreenchimentoNota formDisciplina) {
 		NomeDisciplinas enumDisciplina = NomeDisciplinas.valueOf(formDisciplina.getNomeDisciplina().toUpperCase());
 		Disciplina disciplina = disciplinasRepository.findDisciplina(enumDisciplina, idAluno);
 		Double notaDoBimestre = formDisciplina.getNota();
@@ -56,6 +57,7 @@ public class DisciplinaService {
 	}
 	
 	public List<Disciplina> buscarDisciplinaaPorAluno(Long idAluno){
+		System.out.println(idAluno);
 		List<Disciplina> list = disciplinasRepository.findByAlunoDisciplinas(idAluno);
 		return list;
 	}
