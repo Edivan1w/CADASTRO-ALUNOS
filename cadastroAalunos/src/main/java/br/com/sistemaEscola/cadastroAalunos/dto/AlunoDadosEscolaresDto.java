@@ -16,6 +16,7 @@ public class AlunoDadosEscolaresDto {
 	private Double notaSegundoBimestre;
 	private Double notaTerceiroBimestre;
 	private Double notaQuartoBimestre;
+	private Double media;
 	
 	public AlunoDadosEscolaresDto(Disciplina disciplina) {
 		this.idAluno = disciplina.getAluno().getId();
@@ -25,6 +26,11 @@ public class AlunoDadosEscolaresDto {
 		this.notaSegundoBimestre = disciplina.getSegundoBimestre();
 		this.notaTerceiroBimestre = disciplina.getTerceiroBimestre();
 		this.notaQuartoBimestre = disciplina.getQuartoBimestre();
+		this.media = disciplina.getMedia();
+	}
+
+	public Double getMedia() {
+		return media;
 	}
 
 	public AlunoDadosEscolaresDto(Aluno aluno, Disciplina disciplina) {
@@ -35,6 +41,7 @@ public class AlunoDadosEscolaresDto {
 		this.notaSegundoBimestre = disciplina.getSegundoBimestre();
 		this.notaTerceiroBimestre = disciplina.getTerceiroBimestre();
 		this.notaQuartoBimestre = disciplina.getQuartoBimestre();
+		this.media = disciplina.getMedia();
 	}
 	
 	public Long getIdAluno() {

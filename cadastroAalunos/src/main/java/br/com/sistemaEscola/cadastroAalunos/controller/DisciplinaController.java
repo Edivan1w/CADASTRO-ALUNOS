@@ -1,7 +1,5 @@
 package br.com.sistemaEscola.cadastroAalunos.controller;
 
-
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDadosEscolaresDto;
 import br.com.sistemaEscola.cadastroAalunos.form.FormPreenchimentoNota;
-import br.com.sistemaEscola.cadastroAalunos.model.Disciplina;
 import br.com.sistemaEscola.cadastroAalunos.service.AlunoService;
 import br.com.sistemaEscola.cadastroAalunos.service.DisciplinaService;
 
@@ -26,36 +23,42 @@ import br.com.sistemaEscola.cadastroAalunos.service.DisciplinaService;
 @RequestMapping("/disciplina")
 public class DisciplinaController {
 
-	
 	@Autowired
 	private DisciplinaService disciplinaService;
-    @Autowired
-    private AlunoService alunoService;
-    
-	
+	@Autowired
+	private AlunoService alunoService;
+
 	@GetMapping("/{idAluno}")
-	public List<AlunoDadosEscolaresDto> buscarDisciplinasPorAluno(@PathVariable Long idAluno){
-	
-		List<Disciplina> buscarDisciplinaaPorAluno = disciplinaService.buscarDisciplinaaPorAluno(idAluno);
-		List<AlunoDadosEscolaresDto>listDto = AlunoDadosEscolaresDto.converter(buscarDisciplinaaPorAluno);
-		
-		return listDto;
+	public ResponseEntity<List<AlunoDadosEscolaresDto>> buscarDisciplinasPorAluno(@PathVariable Long idAluno) {
+		if (!alunoService.bucarOptionalAluno(idAluno).isPresent()) {
+               return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(disciplinaService.buscarDisciplinaaPorAluno(idAluno));
 	}
-	
 
 	@PostMapping("/{idAluno}")
 	@Transactional
-	public void cadastrarMateriaNoPerfilAluno(@PathVariable Long idAluno, @RequestParam String nomeDisciplina) {
-		disciplinaService.incluirDisciplina(idAluno, nomeDisciplina);
+	public ResponseEntity<AlunoDadosEscolaresDto> cadastrarMateriaNoPerfilAluno(@PathVariable Long idAluno, @RequestParam String nomeDisciplina) {
+		try {
+			return ResponseEntity.ok(disciplinaService.incluirDisciplina(idAluno, nomeDisciplina));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
-	
-	@PutMapping("{idAluno}")
+
+	@PutMapping("/{idAluno}")
 	@Transactional
-	public ResponseEntity<AlunoDadosEscolaresDto> cadastrarOuAtualizarNotas(@PathVariable Long idAluno, @RequestBody FormPreenchimentoNota formDisciplina) {
-		AlunoDadosEscolaresDto dto = new AlunoDadosEscolaresDto(alunoService.buscarPorId(idAluno),
-				disciplinaService.cadastrarNotaBimestre(idAluno, formDisciplina));
-		return ResponseEntity.ok(dto);
+	public ResponseEntity<AlunoDadosEscolaresDto> cadastrarOuAtualizarNotas(@PathVariable Long idAluno,
+			@RequestBody FormPreenchimentoNota formDisciplina) {
+		try {
+			AlunoDadosEscolaresDto dto = new AlunoDadosEscolaresDto(alunoService.buscarPorId(idAluno),
+					disciplinaService.cadastrarNotaBimestre(idAluno, formDisciplina));
+			return ResponseEntity.ok(dto);
+			
+		} catch (Exception e) {
+		    return ResponseEntity.badRequest().build();
+		}
+		
 	}
-	
 
 }

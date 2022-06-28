@@ -1,10 +1,6 @@
 package br.com.sistemaEscola.cadastroAalunos.service;
 
-
-
-
-
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,6 +50,10 @@ public class AlunoService implements ContratoAluno {
 	@Override
 	public Aluno buscarPorId(Long id) {
 		return alunoReposiry.findById(id).get();
+	}
+	
+	public Optional<Aluno>bucarOptionalAluno(Long idAluno){
+		return alunoReposiry.findById(idAluno);
 	}
 
 
@@ -137,6 +137,10 @@ public class AlunoService implements ContratoAluno {
 
 		aluno.setEndereco(novoEndereco);
 
+	}
+
+	public Optional<Aluno> buscarOp(Long idAluno) {
+		return alunoReposiry.findById(idAluno);
 	}
 
 }

@@ -6,7 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,6 +26,7 @@ public class Aluno {
 	private Long id;
 	@ManyToOne
 	private Classe classe;
+	@Enumerated(EnumType.STRING)
 	private StatusDaMatricola statusDaMatricola = StatusDaMatricola.CURSANDO;
 	@Embedded
 	private DadosPessoais dadosPessoais;
