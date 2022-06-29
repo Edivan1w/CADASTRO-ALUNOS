@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ public class Classe {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String descricao;
+	@Enumerated(EnumType.STRING)
 	private NivelClasse nivelClasse;
 	
 
@@ -49,8 +51,9 @@ public class Classe {
 
 
 
-	public void setNivelClasse(NivelClasse nivelClasse) {
-		this.nivelClasse = nivelClasse;
+	public void setNivelClasse(String nivelClasse) {
+		NivelClasse valueOf = NivelClasse.valueOf(nivelClasse.toUpperCase());
+		this.nivelClasse = valueOf;
 	}
 
 	

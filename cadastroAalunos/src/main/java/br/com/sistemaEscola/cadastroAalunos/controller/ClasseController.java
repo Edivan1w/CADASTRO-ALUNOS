@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.ClasseAlunoDto;
+import br.com.sistemaEscola.cadastroAalunos.dto.ClasseDto;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
 import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
@@ -35,11 +36,10 @@ public class ClasseController {
 	
 	
 	@GetMapping
-	public ResponseEntity<Iterable<Classe>> buscarPorTodasClasses(){
-		Iterable<Classe> todos = service.buscarPorTodos();
-		return ResponseEntity.ok(todos);
-
-	}
+	public ResponseEntity<List<ClasseDto>> buscarPorTodasClasses(){
+		
+		return ResponseEntity.ok(service.buscarPorTodos());
+}
 	
 	@PostMapping
 	public ResponseEntity<Classe> salvar(@RequestBody String descricao) {

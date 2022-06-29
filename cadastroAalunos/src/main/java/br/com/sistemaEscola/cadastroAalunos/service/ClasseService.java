@@ -1,10 +1,12 @@
 package br.com.sistemaEscola.cadastroAalunos.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import br.com.sistemaEscola.cadastroAalunos.dto.ClasseDto;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
 
 import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
@@ -17,9 +19,11 @@ public class ClasseService implements ContratoClasseService{
 	
 	
 	@Override
-	public Iterable<Classe> buscarPorTodos() {
-		return classeRepository.findAll();
+	public List<ClasseDto> buscarPorTodos() {
+		List<Classe> todos = classeRepository.findAll();
+		return ClasseDto.converter(todos);
 		 
+		
 	}
 
 	@Override
