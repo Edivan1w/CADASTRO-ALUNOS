@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.ClasseAlunoDto;
 import br.com.sistemaEscola.cadastroAalunos.dto.ClasseDto;
+import br.com.sistemaEscola.cadastroAalunos.form.ClasseForm;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
 import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
@@ -42,11 +43,17 @@ public class ClasseController {
 }
 	
 	@PostMapping
-	public ResponseEntity<Classe> salvar(@RequestBody String descricao) {
-		Classe classe = new Classe();
-		classe.setDescricao(descricao);
-		service.salvar(classe);
-		return ResponseEntity.ok(classe);
+	public ResponseEntity<ClasseDto> salvar(@RequestBody ClasseForm classeForm) {
+		
+		try {
+			Classe classe = Classe.converterForParaClasse(classeForm);
+			service.salvar(classe);
+			return ResponseEntity.ok(new ClasseDto(classe));
+		} catch (Exception e) {
+                 
+		}
+		return null;
+		
 	}
 	
 

@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import br.com.sistemaEscola.cadastroAalunos.form.ClasseForm;
+
 @Entity
 @Table(name = "classe")
 public class Classe {
@@ -39,7 +41,9 @@ public class Classe {
 		this.alunos = alunos;
 	}
 
-
+	
+	
+	
 
 	public Long getId() {
 		return id;
@@ -52,8 +56,7 @@ public class Classe {
 
 
 	public void setNivelClasse(String nivelClasse) {
-		NivelClasse valueOf = NivelClasse.valueOf(nivelClasse.toUpperCase());
-		this.nivelClasse = valueOf;
+		this.nivelClasse = NivelClasse.verificarSeExisteNivel(nivelClasse);
 	}
 
 	
@@ -75,4 +78,14 @@ public class Classe {
 		return alunos;
 	}
 
+	public static Classe converterForParaClasse(ClasseForm classeForm) {
+		 Classe classe = new Classe();
+		 classe.setDescricao(classeForm.getDescricao());
+		 classe.setNivelClasse(classeForm.getNivelClasse());
+		 return classe;
+	}
+
+	
+	
+	
 }
