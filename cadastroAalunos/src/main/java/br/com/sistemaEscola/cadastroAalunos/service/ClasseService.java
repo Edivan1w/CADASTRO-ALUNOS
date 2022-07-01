@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.ClasseDto;
+import br.com.sistemaEscola.cadastroAalunos.form.ClasseForm;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
 
 import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
@@ -27,8 +29,14 @@ public class ClasseService implements ContratoClasseService{
 	}
 
 	@Override
-	public void salvar(Classe classe) {
-		classeRepository.save(classe);
+	public ClasseDto salvar(ClasseForm classeForm) {
+		try {
+			Classe classe = Classe.converterForParaClasse(classeForm);
+			classeRepository.save(classe);
+			return new ClasseDto(classe);
+		} catch (Exception e) {
+                 throw new NotFoundException("O nivel da classe informado não existe");
+		}
 	}
 
 	@Override

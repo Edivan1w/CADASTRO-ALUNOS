@@ -12,7 +12,7 @@ public enum NivelClasse {
 	public static NivelClasse verificarSeExisteNivel(String nome) {
 		NivelClasse[] values = NivelClasse.values();
 		for (NivelClasse nivelClasse : values) {
-			if(nome.toUpperCase().subSequence(0, 4) == nivelClasse.toString().subSequence(0, 4)) {
+			if(nome.toUpperCase().subSequence(0, 4).equals(nivelClasse.toString().subSequence(0, 4))) {
 				return nivelClasse;
 			}
 		}

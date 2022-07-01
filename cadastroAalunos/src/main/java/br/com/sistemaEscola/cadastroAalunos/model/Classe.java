@@ -35,10 +35,9 @@ public class Classe {
 	public Classe() {
 	}
 
-	public Classe(String descricao, NivelClasse nivelClasse, List<Aluno> alunos) {
+	public Classe(String descricao, NivelClasse nivelClasse) {
 		this.descricao = descricao;
 		this.nivelClasse = nivelClasse;
-		this.alunos = alunos;
 	}
 
 	

@@ -1,7 +1,9 @@
 package br.com.sistemaEscola.cadastroAalunos.controller;
 
-import java.util.Iterator;
+import java.net.URI;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,52 +15,43 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.sistemaEscola.cadastroAalunos.dto.ClasseAlunoDto;
 import br.com.sistemaEscola.cadastroAalunos.dto.ClasseDto;
 import br.com.sistemaEscola.cadastroAalunos.form.ClasseForm;
-import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
-import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
-import br.com.sistemaEscola.cadastroAalunos.repository.AlunoReposiry;
-import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
 import br.com.sistemaEscola.cadastroAalunos.service.ClasseService;
 
-
 @RestController
-@RequestMapping("classe")
+@RequestMapping("/classe")
 public class ClasseController {
-	
+
 	@Autowired
 	private ClasseService service;
-	
-	
+
 	@GetMapping
-	public ResponseEntity<List<ClasseDto>> buscarPorTodasClasses(){
-		
+	public ResponseEntity<List<ClasseDto>> buscarPorTodasClasses() {
+
 		return ResponseEntity.ok(service.buscarPorTodos());
-}
-	
+	}
+
 	@PostMapping
-	public ResponseEntity<ClasseDto> salvar(@RequestBody ClasseForm classeForm) {
-		
+	public ResponseEntity<ClasseDto> salvar(@RequestBody @Valid ClasseForm classeForm, UriComponentsBuilder builder) {
 		try {
-			Classe classe = Classe.converterForParaClasse(classeForm);
-			service.salvar(classe);
-			return ResponseEntity.ok(new ClasseDto(classe));
+			ClasseDto dto = service.salvar(classeForm);
+			System.out.println("chegou aqui");
+			URI uri = builder.path("/classe/{id}").buildAndExpand(dto.getIdClasse()).toUri();
+			return ResponseEntity.created(uri).body(dto);
 		} catch (Exception e) {
-                 
-		}
-		return null;
+			return ResponseEntity.badRequest().build();
+			}
+		
 		
 	}
-	
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Classe> buscarPorId(@PathVariable Long id){
+	public ResponseEntity<Classe> buscarPorId(@PathVariable Long id) {
 		Classe classe = service.buscarPorId(id);
 		return ResponseEntity.ok(classe);
 	}
@@ -69,35 +62,15 @@ public class ClasseController {
 		Classe classe = service.buscarPorId(id);
 		classe.setDescricao(descricao);
 		return ResponseEntity.ok(classe);
-		
+
 	}
-	
-	
+
 	@DeleteMapping("/{id}")
 	@Transactional
 	public void deletar(@PathVariable Long id) {
 		service.deletar(id);
 		ResponseEntity.ok().build();
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
