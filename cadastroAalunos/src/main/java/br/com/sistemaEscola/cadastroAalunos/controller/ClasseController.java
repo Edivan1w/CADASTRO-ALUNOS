@@ -45,32 +45,37 @@ public class ClasseController {
 			return ResponseEntity.created(uri).body(dto);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();
-			}
-		
-		
+		}
+
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Classe> buscarPorId(@PathVariable Long id) {
-		Classe classe = service.buscarPorId(id);
-		return ResponseEntity.ok(classe);
+	public ResponseEntity<ClasseDto> buscarPorId(@PathVariable Long id) {
+		try{
+			return ResponseEntity.ok(service.buscarPorId(id));
+		} catch (Exception e) {
+		return  ResponseEntity.badRequest().build();
+		}
 	}
 
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<Classe> atualizar(@PathVariable Long id, @RequestBody String descricao) {
-		Classe classe = service.buscarPorId(id);
-		classe.setDescricao(descricao);
-		return ResponseEntity.ok(classe);
-
+	public ResponseEntity<ClasseDto> atualizar(@PathVariable Long id, @RequestBody ClasseForm descricao) {
+		try {
+			return ResponseEntity.ok(service.atualizar(id, descricao));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public void deletar(@PathVariable Long id) {
-		service.deletar(id);
-		ResponseEntity.ok().build();
-
-	}
+	public ResponseEntity<?> deletar(@PathVariable Long id) {
+		if(service.buscarOptional(id).isPresent()) {
+			service.deletar(id);
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.badRequest().build();
+}
 
 }

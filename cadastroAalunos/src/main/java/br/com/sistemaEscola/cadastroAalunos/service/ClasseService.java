@@ -1,9 +1,11 @@
 package br.com.sistemaEscola.cadastroAalunos.service;
 
-
+import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -13,19 +15,18 @@ import br.com.sistemaEscola.cadastroAalunos.model.Classe;
 
 import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
 import br.com.sistemaEscola.cadastroAalunos.service.imterface.ContratoClasseService;
+
 @Service
-public class ClasseService implements ContratoClasseService{
+public class ClasseService implements ContratoClasseService {
 
 	@Autowired
 	private ClasseRepository classeRepository;
-	
-	
+
 	@Override
 	public List<ClasseDto> buscarPorTodos() {
 		List<Classe> todos = classeRepository.findAll();
 		return ClasseDto.converter(todos);
-		 
-		
+
 	}
 
 	@Override
@@ -35,45 +36,40 @@ public class ClasseService implements ContratoClasseService{
 			classeRepository.save(classe);
 			return new ClasseDto(classe);
 		} catch (Exception e) {
-                 throw new NotFoundException("O nivel da classe informado não existe");
+			throw new NotFoundException("O nivel da classe informado não existe");
 		}
 	}
 
 	@Override
-	public Classe buscarPorId(Long id) {
-	  Classe classe = classeRepository.findById(id).get();
-	  return classe;
-	
+	public ClasseDto buscarPorId(Long id) {
+		if(classeRepository.findById(id).isPresent()) {
+			return new ClasseDto(classeRepository.findById(id).get());
+		}
+		throw new NotFoundException("Classe não encontrada para atualização.");
+	}
+	@Override
+	public Optional<Classe> buscarOptional(Long id){
+		return classeRepository.findById(id);
 	}
 
 	@Override
-	public void atualizar(Long id, Classe classe) {
-		 Classe classe2 = classeRepository.findById(id).get();
-		 classe2.setDescricao(classe.getDescricao());
+	public ClasseDto atualizar(Long id, ClasseForm form) {
+		if(classeRepository.findById(id).isPresent()) {
+			Classe classe = classeRepository.findById(id).get();
+			classe.setDescricao(form.getDescricao());
+			classe.setNivelClasse(form.getNivelClasse());
+			return new ClasseDto(classe);
+		}
+		throw new NotFoundException("Classe não encontrada para atualização.");
 		
+
 	}
 
 	@Override
 	public void deletar(Long id) {
 		Classe classe = classeRepository.findById(id).get();
 		classeRepository.delete(classe);
-		
+
 	}
 
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

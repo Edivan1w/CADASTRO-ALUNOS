@@ -2,6 +2,7 @@ package br.com.sistemaEscola.cadastroAalunos.service.imterface;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.ClasseDto;
 import br.com.sistemaEscola.cadastroAalunos.form.ClasseForm;
@@ -11,9 +12,10 @@ public interface ContratoClasseService {
 	
 	List<ClasseDto> buscarPorTodos();
 	ClasseDto salvar(ClasseForm classeForm);
-	Classe buscarPorId(Long id);
-	void atualizar(Long id, Classe classe);
+	ClasseDto buscarPorId(Long id);
+	ClasseDto atualizar(Long id, ClasseForm classe);
 	void deletar(Long id);
+	Optional<Classe> buscarOptional(Long id);
     
 	
 	
