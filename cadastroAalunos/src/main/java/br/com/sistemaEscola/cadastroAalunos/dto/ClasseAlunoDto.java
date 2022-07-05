@@ -1,33 +1,63 @@
 package br.com.sistemaEscola.cadastroAalunos.dto;
 
+import java.time.LocalDate;
+
+import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
+import br.com.sistemaEscola.cadastroAalunos.model.Classe;
+import br.com.sistemaEscola.cadastroAalunos.model.StatusDaMatricola;
+
 public class ClasseAlunoDto {
 	
 	private Long idClasse;
+	private String descricao;
+	private String nivelEscolar;
+	private String statusMatricola;
 	private Long idAluno;
+	private String nomeAluno;
+	private LocalDate dataMatricola;
+	
 	
 	public ClasseAlunoDto() {}
 	
-	public ClasseAlunoDto(Long idClasse, Long idAluno) {
-		super();
-		this.idClasse = idClasse;
-		this.idAluno = idAluno;
+	public ClasseAlunoDto(Classe classe, Aluno aluno) {
+		this.idClasse = classe.getId();
+		this.descricao = classe.getDescricao();
+		this.nivelEscolar = classe.getNivelClasse().toString();
+		this.statusMatricola = aluno.getStatusDaMatricola().toString();
+		this.idAluno = aluno.getId();
+		this.nomeAluno = aluno.getDadosPessoais().getNome();
+		this.dataMatricola = aluno.getDataMatricola();
 	}
 
 	public Long getIdClasse() {
 		return idClasse;
 	}
 
-	public void setIdClasse(Long idClasse) {
-		this.idClasse = idClasse;
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public String getNivelEscolar() {
+		return nivelEscolar;
+	}
+
+	public String getStatusMatricola() {
+		return statusMatricola;
 	}
 
 	public Long getIdAluno() {
 		return idAluno;
 	}
 
-	public void setIdAluno(Long idAluno) {
-		this.idAluno = idAluno;
+	public String getNomeAluno() {
+		return nomeAluno;
 	}
+
+	public LocalDate getDataMatricola() {
+		return dataMatricola;
+	}
+
+	
 	
 	
 	

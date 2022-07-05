@@ -2,13 +2,17 @@ package br.com.sistemaEscola.cadastroAalunos.service;
 
 import java.util.Optional;
 
+import javax.naming.directory.NoSuchAttributeException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDto;
+import br.com.sistemaEscola.cadastroAalunos.dto.ClasseAlunoDto;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.form.AlunoDadosForm;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
@@ -44,6 +48,15 @@ public class AlunoService implements ContratoAluno {
 			return AlunoDto.converterParaDto(pageAlunos);
 		}
 		
+	}
+	
+	public ClasseAlunoDto buscarDadosMatricola(Long idAluno){
+		if(alunoReposiry.findById(idAluno).isPresent()) {
+			Aluno aluno = alunoReposiry.findById(idAluno).get();
+			Classe classe = aluno.getClasse();
+			return new ClasseAlunoDto(classe, aluno);
+		}
+		throw new NotFoundException("ALUNO OU CLASSE NÃO ENCOTRADO.");
 	}
 	
 	//retorna apenas um aluno com o parametro id

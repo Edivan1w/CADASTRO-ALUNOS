@@ -1,5 +1,6 @@
 package br.com.sistemaEscola.cadastroAalunos.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class Aluno {
 	private Classe classe;
 	@Enumerated(EnumType.STRING)
 	private StatusDaMatricola statusDaMatricola = StatusDaMatricola.CURSANDO;
+	private LocalDate dataMatricola;
 	@Embedded
 	private DadosPessoais dadosPessoais;
 	@ManyToOne(cascade = CascadeType.PERSIST)
@@ -49,6 +51,19 @@ public class Aluno {
 		this.endereco = endereco;
 		this.disciplinas = disciplinas;
 		
+	}
+
+	
+	
+	
+
+	public LocalDate getDataMatricola() {
+		return dataMatricola;
+	}
+
+
+	public void setDataMatricola(LocalDate dataMatricola) {
+		this.dataMatricola = dataMatricola;
 	}
 
 

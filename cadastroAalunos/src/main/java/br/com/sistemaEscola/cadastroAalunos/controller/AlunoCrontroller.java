@@ -4,6 +4,7 @@ import java.net.URI;
 
 import java.util.Optional;
 
+import javax.naming.directory.NoSuchAttributeException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDto;
+import br.com.sistemaEscola.cadastroAalunos.dto.ClasseAlunoDto;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.form.AlunoDadosForm;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
@@ -58,6 +60,15 @@ public class AlunoCrontroller {
 		return alunoService.buscarListaAlunos(nome, pageable);
 }
 
+	@GetMapping("/dados-matricola/{idAluno}")
+	public ResponseEntity<ClasseAlunoDto> dadosDeMatricola(@PathVariable Long idAluno){
+		try {
+			return ResponseEntity.ok(alunoService.buscarDadosMatricola(idAluno));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+	}
 
 	@CacheEvict(value = "listaDeAlunos", allEntries = true)
 	@PostMapping("/classe-matricola/{id}")
