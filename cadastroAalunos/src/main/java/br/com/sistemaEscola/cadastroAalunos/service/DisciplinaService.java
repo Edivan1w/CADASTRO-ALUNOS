@@ -1,9 +1,8 @@
 package br.com.sistemaEscola.cadastroAalunos.service;
 
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,11 +42,15 @@ public class DisciplinaService {
 	public Disciplina cadastrarNotaBimestre( Long idAluno, FormPreenchimentoNota formDisciplina) {
 		NomeDisciplinas enumDisciplina = NomeDisciplinas.valueOf(formDisciplina.getNomeDisciplina().toUpperCase());
 		Disciplina disciplina = disciplinasRepository.findDisciplina(enumDisciplina, idAluno);
+		System.out.println(disciplina.getId());
 		Double notaDoBimestre = formDisciplina.getNota();
+		
+		setarMedia(disciplina);
+		
 		return atribuirNotaSeBimestreExistir(formDisciplina, disciplina, notaDoBimestre);
 	}
 
-	
+
 	public List<AlunoDadosEscolaresDto> buscarDisciplinaaPorAluno(Long idAluno){
 		List<Disciplina> alunoDisciplinas = disciplinasRepository.findByAlunoDisciplinas(idAluno);
 		List<AlunoDadosEscolaresDto>listDto = AlunoDadosEscolaresDto.converter(alunoDisciplinas);
@@ -57,25 +60,11 @@ public class DisciplinaService {
 	private Disciplina atribuirNotaSeBimestreExistir(FormPreenchimentoNota formDisciplina, Disciplina disciplina,
 			Double notaDoBimestre) {
 		Integer semestre = formDisciplina.getSemestreParaCadastrarNota();
-		if(semestre <1 || semestre > 4){
-			throw new NotFoundException("Bimestre não encontrado");
+		if(semestre == 1 || semestre == 2 || semestre == 3 || semestre == 4){
+			return DisciplinaUtilEnum.setarNota(disciplina, formDisciplina);
 		}
-		switch(semestre) {
-		case 1:
-			disciplina.setPrimeiroBimestre(notaDoBimestre);
-			break;
-		case 2: 
-			disciplina.setSegundoBimestre(notaDoBimestre);
-			break;
-		case 3:
-			disciplina.setTerceiroBimestre(notaDoBimestre);
-			break;
-		case 4:
-			disciplina.setQuartoBimestre(notaDoBimestre);
-			break;	
-		}
-		disciplina.setMedia();
-		return disciplina;
+		throw new NotFoundException("Bimestre não encontrado");
+
 	}
 	
 	
@@ -87,6 +76,13 @@ public class DisciplinaService {
 			}
 		}
 		return false;
+	}
+	
+	private void setarMedia(Disciplina disciplina) {
+		List<Double> notas = Arrays.asList(disciplina.getPrimeiroBimestre(), disciplina.getSegundoBimestre(),
+				disciplina.getTerceiroBimestre(), disciplina.getQuartoBimestre());
+		disciplina.setMedia(notas.stream().filter(n -> n != null)
+				.mapToDouble(n -> Double.valueOf(n)).average().getAsDouble());
 	}
 	
 	

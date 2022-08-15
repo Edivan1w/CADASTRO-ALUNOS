@@ -24,11 +24,11 @@ public class Disciplina {
 	@Enumerated(EnumType.STRING)
 	private NomeDisciplinas nomeDisciplina;
 	private String nomeAlunoVinculado;
-	private Double primeiroBimestre = 0.0;
-	private Double segundoBimestre = 0.0;
-	private Double terceiroBimestre = 0.0;
-	private Double quartoBimestre = 0.0;
-	private Double media = 0.0;
+	private Double primeiroBimestre;
+	private Double segundoBimestre;
+	private Double terceiroBimestre;
+	private Double quartoBimestre;
+	private Double media;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Aluno aluno;
@@ -111,9 +111,9 @@ public class Disciplina {
 	public Double getMedia() {
 		return media;
 	}
-	public void setMedia() {
-		this.media = (this.getPrimeiroBimestre() + this.getSegundoBimestre() + 
-				this.getTerceiroBimestre() + this.getQuartoBimestre())/4;
+	
+	public void setMedia(Double media) {
+		this.media = media;
 	}
 
 

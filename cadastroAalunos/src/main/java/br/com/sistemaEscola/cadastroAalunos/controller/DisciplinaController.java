@@ -56,6 +56,7 @@ public class DisciplinaController {
 			return ResponseEntity.ok(dto);
 			
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		    return ResponseEntity.badRequest().build();
 		}
 		

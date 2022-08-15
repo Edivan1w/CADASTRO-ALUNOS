@@ -78,12 +78,10 @@ public class AlunoService implements ContratoAluno {
 		aluno.setClasse(classe);
 		aluno.setDadosPessoais(dados);
 		if (enderecoRepository.existsById(dados.getCep())) {
-			System.out.println("1");
 			Endereco endereco = enderecoRepository.findById(dados.getCep()).get();
 			aluno.setEndereco(endereco);
 
 		} else {
-			System.out.println("2");
 			String cep = dados.getCep();
 			Endereco endereco = cepService.consultarCep(cep);
 			aluno.setEndereco(endereco);
@@ -102,36 +100,20 @@ public class AlunoService implements ContratoAluno {
 		Aluno aluno = alunoReposiry.findById(id).get();
 		aluno.setDadosPessoais(enderecoDados);
 		String cep = enderecoDados.getCep();
-		System.out.println(cep);
 		if (enderecoRepository.existsById(cep)) {
-			System.out.println("1");
 			salvarComEnderecoExistete(id, cep);
-			
-			return;
 		} else {
 			System.out.println("2");
 			salvarComEnderecoNaoExistete(id, cep);
-			
-			return;
 		}
 	}
-	
-//	//atualiza apenas os dados pessoais do aluno
-//	@Override
-//	public void atualizarDadosPessoais(Long id, DadosPessoais dadosPessoais) {
-//		Aluno aluno = alunoReposiry.findById(id).get();
-//		aluno.setDadosPessoais(dadosPessoais);
-//	}
+
 	
 	@Override
 	public void deletarPorId(Long id) {
 		alunoReposiry.deleteById(id);
 	}
 	
-	
-
-	
-
 	// metodo utilitário
 	private void salvarComEnderecoExistete(Long id, String cep) {
 		Aluno aluno = alunoReposiry.findById(id).get();

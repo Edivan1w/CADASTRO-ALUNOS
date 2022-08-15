@@ -30,14 +30,10 @@ public class ClasseService implements ContratoClasseService {
 	}
 
 	@Override
-	public ClasseDto salvar(ClasseForm classeForm) {
-		try {
+	public ClasseDto salvar(ClasseForm classeForm) throws NotFoundException {
 			Classe classe = Classe.converterForParaClasse(classeForm);
 			classeRepository.save(classe);
 			return new ClasseDto(classe);
-		} catch (Exception e) {
-			throw new NotFoundException("O nivel da classe informado não existe");
-		}
 	}
 
 	@Override
