@@ -30,36 +30,26 @@ public class DisciplinaController {
 
 	@GetMapping("/{idAluno}")
 	public ResponseEntity<List<AlunoDadosEscolaresDto>> buscarDisciplinasPorAluno(@PathVariable Long idAluno) {
-		if (!alunoService.bucarOptionalAluno(idAluno).isPresent()) {
-               return ResponseEntity.notFound().build();
-		}
 		return ResponseEntity.ok(disciplinaService.buscarDisciplinaaPorAluno(idAluno));
 	}
 
 	@PostMapping("/{idAluno}")
 	@Transactional
-	public ResponseEntity<AlunoDadosEscolaresDto> cadastrarMateriaNoPerfilAluno(@PathVariable Long idAluno, @RequestParam String nomeDisciplina) {
-		try {
-			return ResponseEntity.ok(disciplinaService.incluirDisciplina(idAluno, nomeDisciplina));
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().build();
-		}
+	public ResponseEntity<AlunoDadosEscolaresDto> cadastrarMateriaNoPerfilAluno(@PathVariable Long idAluno,
+			@RequestParam String nomeDisciplina) {
+
+		return ResponseEntity.ok(disciplinaService.incluirDisciplina(idAluno, nomeDisciplina));
+
 	}
 
 	@PutMapping("/{idAluno}")
 	@Transactional
 	public ResponseEntity<AlunoDadosEscolaresDto> cadastrarOuAtualizarNotas(@PathVariable Long idAluno,
 			@RequestBody FormPreenchimentoNota formDisciplina) {
-		try {
-			AlunoDadosEscolaresDto dto = new AlunoDadosEscolaresDto(alunoService.buscarPorId(idAluno),
-					disciplinaService.cadastrarNotaBimestre(idAluno, formDisciplina));
-			return ResponseEntity.ok(dto);
-			
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		    return ResponseEntity.badRequest().build();
-		}
-		
+		AlunoDadosEscolaresDto dto = new AlunoDadosEscolaresDto(alunoService.buscarPorId(idAluno),
+				disciplinaService.cadastrarNotaBimestre(idAluno, formDisciplina));
+		return ResponseEntity.ok(dto);
+
 	}
 
 }

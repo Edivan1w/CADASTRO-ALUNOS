@@ -1,4 +1,4 @@
-package br.com.sistemaEscola.cadastroAalunos.service;
+package br.com.sistemaEscola.cadastroAalunos.service.util;
 
 import br.com.sistemaEscola.cadastroAalunos.form.FormPreenchimentoNota;
 import br.com.sistemaEscola.cadastroAalunos.model.Disciplina;
