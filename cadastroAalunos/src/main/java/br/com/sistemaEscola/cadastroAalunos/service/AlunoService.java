@@ -45,7 +45,6 @@ public class AlunoService implements ContratoAluno {
 			Page<Aluno> pageAlunos = alunoReposiry.findByDadosPessoaisNome(nome, pageable);
 			return AlunoDto.converterParaDto(pageAlunos);
 		}
-
 	}
 
 	public ClasseAlunoDto buscarDadosMatricola(Long idAluno) {
