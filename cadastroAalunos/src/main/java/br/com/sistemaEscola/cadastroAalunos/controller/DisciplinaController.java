@@ -18,7 +18,8 @@ import br.com.sistemaEscola.cadastroAalunos.dto.AlunoDadosEscolaresDto;
 import br.com.sistemaEscola.cadastroAalunos.form.FormPreenchimentoNota;
 import br.com.sistemaEscola.cadastroAalunos.service.AlunoService;
 import br.com.sistemaEscola.cadastroAalunos.service.DisciplinaService;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/disciplina")
 public class DisciplinaController {

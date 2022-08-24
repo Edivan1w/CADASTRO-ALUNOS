@@ -22,7 +22,9 @@ import br.com.sistemaEscola.cadastroAalunos.dto.ClasseDto;
 import br.com.sistemaEscola.cadastroAalunos.form.ClasseForm;
 import br.com.sistemaEscola.cadastroAalunos.model.Classe;
 import br.com.sistemaEscola.cadastroAalunos.service.ClasseService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/classe")
 public class ClasseController {

@@ -29,7 +29,8 @@ import br.com.sistemaEscola.cadastroAalunos.dto.ClasseAlunoDto;
 import br.com.sistemaEscola.cadastroAalunos.form.AlunoDadosForm;
 import br.com.sistemaEscola.cadastroAalunos.model.Aluno;
 import br.com.sistemaEscola.cadastroAalunos.service.AlunoService;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/aluno")
 public class AlunoCrontroller {
