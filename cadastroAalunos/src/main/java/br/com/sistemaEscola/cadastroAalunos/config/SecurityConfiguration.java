@@ -50,6 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.GET ,"/actuator/**").permitAll()
 		.antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
 		.antMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
+		.antMatchers(HttpMethod.GET, "/h2-console/**").permitAll()
 		.anyRequest()
 		//que está autenticada
 		.authenticated()

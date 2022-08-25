@@ -36,7 +36,9 @@ public class Aluno {
 	private Endereco endereco;
 	@OneToMany(mappedBy = "aluno")
 	private List<Disciplina> disciplinas = new ArrayList<>();
-	
+	@OneToMany
+	private List<Matricola> matricolas = new ArrayList<>();
+
 	
 	
 	public Aluno() {}
@@ -52,10 +54,18 @@ public class Aluno {
 		this.disciplinas = disciplinas;
 		
 	}
+	
+	
 
-	
-	
-	
+	public List<Matricola> getMatricolas() {
+		return matricolas;
+	}
+
+
+	public void setMatricolas(List<Matricola> matricolas) {
+		this.matricolas = matricolas;
+	}
+
 
 	public LocalDate getDataMatricola() {
 		return dataMatricola;

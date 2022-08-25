@@ -26,9 +26,7 @@ public class Classe {
 	private String descricao;
 	@Enumerated(EnumType.STRING)
 	private NivelClasse nivelClasse;
-	
-
-
+    
 	@OneToMany(mappedBy = "classe", cascade = CascadeType.ALL)
 	private List<Aluno> alunos = new ArrayList<>();
 
