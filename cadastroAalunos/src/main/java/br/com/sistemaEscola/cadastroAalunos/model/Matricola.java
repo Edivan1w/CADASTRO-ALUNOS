@@ -3,6 +3,8 @@ package br.com.sistemaEscola.cadastroAalunos.model;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,17 +17,20 @@ public class Matricola {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long numeroMatricola;
+	@Enumerated(EnumType.STRING)
+	private StatusDaMatricola statusDaMatricola = StatusDaMatricola.CURSANDO;
 	private Long aluno;
 	private Long classe;
 	private LocalDate dataMatricola;
-    private LocalDate dataIncerramentoMatricola;
+    private LocalDate dataEncerramentoMatricola;
     
      public Matricola() {}
      
-     public Matricola(Aluno aluno, Classe classe) {
+     public Matricola(Aluno aluno) {
     	 this.aluno = aluno.getId();
-    	 this.classe = classe.getId();
+    	 this.classe = aluno.getClasse().getId();
     	 this.dataMatricola = LocalDate.now();
+    	 aluno.getMatricolas().add(this);
      }
 
 	public Long getNumeroMatricola() {
@@ -60,12 +65,12 @@ public class Matricola {
 		this.dataMatricola = dataMatricola;
 	}
 
-	public LocalDate getDataIncerramentoMatricola() {
-		return dataIncerramentoMatricola;
+	public LocalDate getDataEncerramentoMatricola() {
+		return dataEncerramentoMatricola;
 	}
 
-	public void setDataIncerramentoMatricola(LocalDate dataIncerramentoMatricola) {
-		this.dataIncerramentoMatricola = dataIncerramentoMatricola;
+	public void setDataEncerramentoMatricola(LocalDate dataIncerramentoMatricola) {
+		this.dataEncerramentoMatricola = dataIncerramentoMatricola;
 	}
      
      

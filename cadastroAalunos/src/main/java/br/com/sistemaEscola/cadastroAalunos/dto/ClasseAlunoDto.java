@@ -11,7 +11,6 @@ public class ClasseAlunoDto {
 	private Long idClasse;
 	private String descricao;
 	private String nivelEscolar;
-	private String statusMatricola;
 	private Long idAluno;
 	private String nomeAluno;
 	private LocalDate dataMatricola;
@@ -23,7 +22,6 @@ public class ClasseAlunoDto {
 		this.idClasse = classe.getId();
 		this.descricao = classe.getDescricao();
 		this.nivelEscolar = classe.getNivelClasse().toString();
-		this.statusMatricola = aluno.getStatusDaMatricola().toString();
 		this.idAluno = aluno.getId();
 		this.nomeAluno = aluno.getDadosPessoais().getNome();
 		this.dataMatricola = aluno.getDataMatricola();
@@ -39,10 +37,6 @@ public class ClasseAlunoDto {
 
 	public String getNivelEscolar() {
 		return nivelEscolar;
-	}
-
-	public String getStatusMatricola() {
-		return statusMatricola;
 	}
 
 	public Long getIdAluno() {

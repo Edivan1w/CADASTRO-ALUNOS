@@ -7,8 +7,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,8 +25,6 @@ public class Aluno {
 	private Long id;
 	@ManyToOne
 	private Classe classe;
-	@Enumerated(EnumType.STRING)
-	private StatusDaMatricola statusDaMatricola = StatusDaMatricola.CURSANDO;
 	private LocalDate dataMatricola;
 	@Embedded
 	private DadosPessoais dadosPessoais;
@@ -45,10 +41,9 @@ public class Aluno {
 
 
 	public Aluno(Classe classe, DadosPessoais dadosPessoais, Endereco endereco, 
-			List<Disciplina> disciplinas, StatusDaMatricola statusDaMatricola) {
+			List<Disciplina> disciplinas) {
 		
 		this.classe = classe;
-		this.statusDaMatricola = statusDaMatricola;
 		this.dadosPessoais = dadosPessoais;
 		this.endereco = endereco;
 		this.disciplinas = disciplinas;
@@ -94,15 +89,6 @@ public class Aluno {
 
 	public void setClasse(Classe classe) {
 		this.classe = classe;
-	}
-
-	public StatusDaMatricola getStatusDaMatricola() {
-		return statusDaMatricola;
-	}
-
-
-	public void setStatusDaMatricola(StatusDaMatricola statusDaMatricola) {
-		this.statusDaMatricola = statusDaMatricola;
 	}
 
 	public DadosPessoais getDadosPessoais() {

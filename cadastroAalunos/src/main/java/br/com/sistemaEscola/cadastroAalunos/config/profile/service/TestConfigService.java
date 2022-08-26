@@ -10,15 +10,16 @@ import br.com.sistemaEscola.cadastroAalunos.model.Classe;
 import br.com.sistemaEscola.cadastroAalunos.model.DadosPessoais;
 import br.com.sistemaEscola.cadastroAalunos.model.Disciplina;
 import br.com.sistemaEscola.cadastroAalunos.model.Endereco;
+import br.com.sistemaEscola.cadastroAalunos.model.Matricola;
 import br.com.sistemaEscola.cadastroAalunos.model.NivelClasse;
 import br.com.sistemaEscola.cadastroAalunos.model.NomeDisciplinas;
 import br.com.sistemaEscola.cadastroAalunos.model.Role;
-import br.com.sistemaEscola.cadastroAalunos.model.StatusDaMatricola;
 import br.com.sistemaEscola.cadastroAalunos.model.Usuario;
 import br.com.sistemaEscola.cadastroAalunos.repository.AlunoReposiry;
 import br.com.sistemaEscola.cadastroAalunos.repository.ClasseRepository;
 import br.com.sistemaEscola.cadastroAalunos.repository.DisciplinasRepository;
 import br.com.sistemaEscola.cadastroAalunos.repository.EnderecoRepository;
+import br.com.sistemaEscola.cadastroAalunos.repository.MatricolaRepository;
 import br.com.sistemaEscola.cadastroAalunos.repository.RoleRepository;
 import br.com.sistemaEscola.cadastroAalunos.repository.UsuarioRepository;
 
@@ -37,6 +38,8 @@ public class TestConfigService {
 	private DisciplinasRepository disciplinasRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private MatricolaRepository matricolaRepository;
 	
 	public void startUser() {
 		Role role = new Role();
@@ -60,6 +63,10 @@ public class TestConfigService {
 		
 		Classe classe = classeRepository.save(new Classe("Primeiro ano 'c'", NivelClasse.PRIMEIRO_ANO_ENSINO_MEDIO));
 		
-		disciplina.setAluno(alunoReposiry.save(new Aluno(classe, dadosPessoais, endereco, Arrays.asList(disciplina), StatusDaMatricola.CURSANDO)));
+		Aluno aluno = new Aluno(classe, dadosPessoais, endereco, Arrays.asList(disciplina));
+		disciplina.setAluno(alunoReposiry.save(aluno));
+		
+		matricolaRepository.save(new Matricola(aluno));
+		
 	}
 }

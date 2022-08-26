@@ -87,4 +87,6 @@ public class AlunoCrontroller {
 		alunoService.deletarPorId(id);
 		return ResponseEntity.noContent().build();
 	}
+	
 }
+
