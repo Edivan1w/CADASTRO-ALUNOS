@@ -17,7 +17,7 @@ public interface ContratoAluno {
 
 	public Page<AlunoDto> buscarListaAlunos(String nome, Pageable pageable);
 	public Aluno buscarPorId(Long id);
-	public AlunoDto salvarAlunoComDados(Long id, AlunoDadosForm dados);
+	public AlunoDto salvarAlunoComDados(AlunoDadosForm dados);
 	public void atualizarCepEDados(Long id, AlunoDadosForm enderecoDados);
 	public void deletarPorId(Long id);
 }

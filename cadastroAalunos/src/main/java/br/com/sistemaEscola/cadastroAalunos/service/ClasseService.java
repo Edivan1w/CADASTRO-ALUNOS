@@ -37,11 +37,9 @@ public class ClasseService implements ContratoClasseService {
 	}
 
 	@Override
-	public ClasseDto buscarPorId(Long id) {
-		if(classeRepository.findById(id).isPresent()) {
-			return new ClasseDto(classeRepository.findById(id).get());
-		}
-		throw new NotFoundException("Classe não encontrada para atualização.");
+	public Classe buscarPorId(Long id) {
+		return classeRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Classe não encontrada para atualização."));
 	}
 	@Override
 	public Optional<Classe> buscarOptional(Long id){

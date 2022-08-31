@@ -26,9 +26,9 @@ public class Matricola {
     
      public Matricola() {}
      
-     public Matricola(Aluno aluno) {
+     public Matricola(Classe classe, Aluno aluno) {
     	 this.aluno = aluno.getId();
-    	 this.classe = aluno.getClasse().getId();
+    	 this.classe = classe.getId();
     	 this.dataMatricola = LocalDate.now();
     	 aluno.getMatricolas().add(this);
      }

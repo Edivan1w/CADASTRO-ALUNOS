@@ -12,7 +12,7 @@ public interface ContratoClasseService {
 	
 	List<ClasseDto> buscarPorTodos();
 	ClasseDto salvar(ClasseForm classeForm);
-	ClasseDto buscarPorId(Long id);
+	Classe buscarPorId(Long id);
 	ClasseDto atualizar(Long id, ClasseForm classe);
 	void deletar(Long id);
 	Optional<Classe> buscarOptional(Long id);

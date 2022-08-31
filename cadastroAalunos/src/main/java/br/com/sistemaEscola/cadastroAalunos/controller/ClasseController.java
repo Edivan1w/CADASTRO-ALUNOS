@@ -54,7 +54,7 @@ public class ClasseController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ClasseDto> buscarPorId(@PathVariable Long id) {
 		try{
-			return ResponseEntity.ok(service.buscarPorId(id));
+			return ResponseEntity.ok(new ClasseDto(service.buscarPorId(id)));
 		} catch (Exception e) {
 		return  ResponseEntity.badRequest().build();
 		}

@@ -64,11 +64,8 @@ public class AlunoService implements ContratoAluno {
 
 	// salva o aluno com todos os seus dados
 	@Override
-	public AlunoDto salvarAlunoComDados(Long idClasse, AlunoDadosForm dados) {
-		Classe classe = classeRepository.findById(idClasse)
-				.orElseThrow(() -> new ObjectNotFoundException("Disciplina não cadastrada no banco de dados"));
+	public AlunoDto salvarAlunoComDados(AlunoDadosForm dados) {
 		Aluno aluno = new Aluno();
-		aluno.setClasse(classe);
 		aluno.setDadosPessoais(dados);
 		if (enderecoRepository.existsById(dados.getCep())) {
 			Endereco endereco = enderecoRepository.findById(dados.getCep()).get();

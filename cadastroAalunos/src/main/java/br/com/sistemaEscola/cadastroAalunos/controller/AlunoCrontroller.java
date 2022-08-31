@@ -55,16 +55,16 @@ public class AlunoCrontroller {
 	}
 
 	@CacheEvict(value = "listaDeAlunos", allEntries = true)
-	@PostMapping("/classe-matricola/{idClasse}")
+	@PostMapping("/salvar-aluno")
 	@Transactional
-	public ResponseEntity<AlunoDto> salvarAlunoComDados(@PathVariable Long idClasse,
-			@RequestBody @Valid AlunoDadosForm dados, UriComponentsBuilder builder) {
-		AlunoDto alunoDto = alunoService.salvarAlunoComDados(idClasse, dados);
+	public ResponseEntity<AlunoDto> salvarAlunoComDados(@RequestBody @Valid AlunoDadosForm dados, UriComponentsBuilder builder) {
+		AlunoDto alunoDto = alunoService.salvarAlunoComDados(dados);
 		Aluno aluno = alunoService.buscarPorId(alunoDto.getId());
 		URI uri = builder.path("/aluno/{id}").buildAndExpand(aluno.getId()).toUri();
 
 		return ResponseEntity.created(uri).body(alunoDto);
 	}
+	
 
 	// Este método vai atribuir um endereço a um aluno, o metodo esta usando o
 	// metodo consultar cep que esta consumindo uma api externa

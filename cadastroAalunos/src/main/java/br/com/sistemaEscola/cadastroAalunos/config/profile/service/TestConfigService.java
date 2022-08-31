@@ -66,7 +66,7 @@ public class TestConfigService {
 		Aluno aluno = new Aluno(classe, dadosPessoais, endereco, Arrays.asList(disciplina));
 		disciplina.setAluno(alunoReposiry.save(aluno));
 		
-		matricolaRepository.save(new Matricola(aluno));
+		matricolaRepository.save(new Matricola(classe, aluno));
 		
 	}
 }
